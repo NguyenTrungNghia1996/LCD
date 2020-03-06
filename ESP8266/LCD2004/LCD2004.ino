@@ -1,3 +1,5 @@
+#include <NTPClient.h>
+#include <WiFiUdp.h>
 #include "ESP8266WiFi.h"                // Version 2.6.3
 #include <ArduinoJson.h>                // Version 6.13.0
 #include <DNSServer.h>
@@ -7,8 +9,11 @@
 #include <Wire.h>
 #include <LiquidCrystal_I2C.h>
 
-LiquidCrystal_I2C lcd(0x27, 20, 4); // set the LCD address to 0x27 for a 16 chars and 2 line display
+int timezone = 25200; // 7*60*60
+int dst = 0;
+LiquidCrystal_I2C lcd(0x3f, 20, 4); // set the LCD address to 0x27 for a 16 chars and 2 line display
 #define flash           0
+char daysOfTheWeek[7][12] = {"Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"};
 String cpuName, cpuLoad, cpuTemp, ramTotal, gpuName, gpuLoad, gpuTemp, net, ramUse;
 String oldCPULoad, oldCPUTemp, oldRAMToal, oldGPULoad, oldGPUTemp, oldNet, oldRamUse;
 int timer, demFlash, matKetNoiWiFi;
@@ -52,26 +57,69 @@ void setup()
   lcd.print("Connecting to WiFi");
   wifiManager.autoConnect("ThanhHien", "1234qwer");
   lcd.clear();
-  lcd.setCursor(0, 0);
-  lcd.print("App Not Open");
-  lcd.setCursor(0, 1);
-  lcd.print("TCP Server IP");
-  lcd.setCursor(0, 2);
+  lcd.setCursor(0, 3);
+  lcd.print("IP:");
+  lcd.setCursor(5, 3);
   lcd.print(WiFi.localIP().toString());
   server.begin();
+  configTime(timezone, dst, "pool.ntp.org", "nist.time.gov");
+  lcd.setCursor(0, 0);
+  lcd.print("Waiting NTP Server");
+  int i = 0;
+  while (!time(nullptr)) {
+    lcd.setCursor(i, 1);
+    lcd.print("#");
+    i = i + 1;
+  }
+  lcd.setCursor(0, 0);
+  lcd.print("                   ");
 }
 
 
 void loop()
 {
-  if (ketNoiApp)                                                      
-    getData();                                                      
+  if (ketNoiApp)
+    getData();
   else {
-    lcd.setCursor(0, 0);
-    lcd.print("App Not Open");
-    lcd.setCursor(0, 1);
-    lcd.print("TCP Server IP");
-    lcd.setCursor(0, 2);
+    time_t now = time(nullptr);
+    struct tm* p_tm = localtime(&now);
+    lcd.setCursor(4, 0);
+    lcd.print("  ");
+    lcd.setCursor(4, 0);
+    lcd.print(p_tm->tm_hour);
+    lcd.setCursor(6, 0);
+    lcd.print(":");
+    lcd.setCursor(7, 0);
+    lcd.print("  ");
+    lcd.setCursor(7, 0);
+    lcd.print(p_tm->tm_min);
+    lcd.setCursor(9, 0);
+    lcd.print(":");
+    lcd.setCursor(10, 0);
+    lcd.print("  ");
+    lcd.setCursor(10, 0);
+    lcd.print(p_tm->tm_sec);
+
+    lcd.setCursor(4, 1);
+    lcd.print("  ");
+    lcd.setCursor(4, 1);
+    lcd.print(p_tm->tm_mday);
+    lcd.setCursor(6, 1);
+    lcd.print("/");
+    lcd.setCursor(7, 1);
+    lcd.print("  ");
+    lcd.setCursor(7, 1);
+    lcd.print(p_tm->tm_mon + 1);
+    lcd.setCursor(9, 1);
+    lcd.print("/");
+    lcd.setCursor(10, 1);
+    lcd.print("    ");
+    lcd.setCursor(10, 1);
+    lcd.print(p_tm->tm_year + 1900);
+    
+    lcd.setCursor(0, 3);
+    lcd.print("IP:");
+    lcd.setCursor(5, 3);
     lcd.print(WiFi.localIP().toString());
     if (!client.connected()) {
       client = server.available();
@@ -98,8 +146,8 @@ void border() {
 void getData() {
   if (client.connected()) {
     if (client.available() > 0) {
-      String data = client.readStringUntil('\n');            
-      DynamicJsonDocument root(300);                          
+      String data = client.readStringUntil('\n');
+      DynamicJsonDocument root(300);
       deserializeJson(root, (char*) data.c_str());
       cpuName = root["CPU"]["Name"].as<String>();
       cpuLoad = root["CPU"]["Load"].as<String>();
@@ -112,11 +160,11 @@ void getData() {
       net = root["Net"]["net"].as<String>();
       if (cpuLoad.length() > 5)
         cpuLoad = cpuLoad.substring(0, 5);
-      if (lanDauMoApp) {                                     
+      if (lanDauMoApp) {
         border();
         lanDauMoApp = false;
       }
-      else {                                                 
+      else {
         if (oldCPULoad != cpuLoad) {
           lcd.setCursor(5, 0);
           lcd.print("      ");
@@ -133,7 +181,7 @@ void getData() {
           lcd.print(cpuTemp + char(2) + "C");
           oldCPUTemp = cpuTemp;
         }
-        
+
         lcd.setCursor(5, 2);
         lcd.print("               ");
         lcd.setCursor(5, 2);
