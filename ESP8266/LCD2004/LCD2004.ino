@@ -12,8 +12,6 @@
 int timezone = 25200; // 7*60*60
 int dst = 0;
 LiquidCrystal_I2C lcd(0x3f, 20, 4); // set the LCD address to 0x27 for a 16 chars and 2 line display
-#define flash           0
-char daysOfTheWeek[7][12] = {"Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"};
 String cpuName, cpuLoad, cpuTemp, ramTotal, gpuName, gpuLoad, gpuTemp, net, ramUse;
 String oldCPULoad, oldCPUTemp, oldRAMToal, oldGPULoad, oldGPUTemp, oldNet, oldRamUse;
 int timer, demFlash, matKetNoiWiFi;
@@ -55,7 +53,7 @@ void setup()
   lcd.createChar(2, customChar2);
   lcd.setCursor(0, 0);
   lcd.print("Connecting to WiFi");
-  wifiManager.autoConnect("ThanhHien", "1234qwer");
+  wifiManager.autoConnect("MCU", "123456");
   lcd.clear();
   lcd.setCursor(0, 3);
   lcd.print("IP:");
