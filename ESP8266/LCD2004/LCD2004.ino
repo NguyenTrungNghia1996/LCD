@@ -1,6 +1,6 @@
+#include <ESP8266WiFi.h>
 #include <NTPClient.h>
 #include <WiFiUdp.h>
-#include "ESP8266WiFi.h"                // Version 2.6.3
 #include <ArduinoJson.h>                // Version 6.13.0
 #include <DNSServer.h>
 #include <ESP8266WebServer.h>
@@ -48,7 +48,6 @@ void setup()
   lcd.init();
   lcd.backlight();
   Serial.begin(115200);
-  pinMode(flash, INPUT_PULLUP);
   lcd.createChar(1, customChar);
   lcd.createChar(2, customChar2);
   lcd.setCursor(0, 0);
@@ -114,7 +113,7 @@ void loop()
     lcd.print("    ");
     lcd.setCursor(10, 1);
     lcd.print(p_tm->tm_year + 1900);
-    
+
     lcd.setCursor(0, 3);
     lcd.print("IP:");
     lcd.setCursor(5, 3);
@@ -145,6 +144,7 @@ void getData() {
   if (client.connected()) {
     if (client.available() > 0) {
       String data = client.readStringUntil('\n');
+      Serial.println(data);
       DynamicJsonDocument root(300);
       deserializeJson(root, (char*) data.c_str());
       cpuName = root["CPU"]["Name"].as<String>();
