@@ -7,15 +7,14 @@ SSD1306Wire display(0x3c, D2, D1);
 #include <ESP8266WebServer.h>
 #include <WiFiManager.h>
 
-String cpuName, cpuLoad, cpuTemp, ramLoad, gpuName, gpuLoad, gpuTemp;
-String oldCPULoad, oldCPUTemp, oldRAMLoad, oldGPULoad, oldGPUTemp;
+String cpuName, cpuLoad, cpuTemp, ramLoad, gpuName, gpuLoad, gpuTemp, net;
+String oldCPULoad, oldCPUTemp, oldRAMLoad, oldGPULoad, oldGPUTemp, oldNet;
 int timer = 0, demFlash, matKetNoiWiFi;
 bool lanDauMoApp = true, ketNoiApp, doiWiFi;
 #define flash 0
 WiFiServer server(80);
 WiFiManager wifiManager;
 WiFiClient client;
-Ticker flipper;
 void setup() {
   Serial.begin(115200);
   pinMode(flash, INPUT_PULLUP);
@@ -38,7 +37,22 @@ void setup() {
 void loop() {
   display.clear();
   wifi();
+  if (ketNoiApp)
+  {
+    getData();
+  }
+  else {
+    if (!client.connected()) {
+      client = server.available();
+    }
+    else {
+      display.clear();
+      ketNoiApp   = true;
+      lanDauMoApp = true;
+    }
+  }
   display.display();
+  delay(1000);
 }
 int getBarsSignal(long rssi) {
   int bars;
@@ -57,9 +71,9 @@ int getBarsSignal(long rssi) {
   }
   return bars;
 }
-void wifi(){
+void wifi() {
   if (WiFi.status() == WL_CONNECTED)
-  { 
+  {
     display.drawLine(0, 52, 128, 52);
     String ip = WiFi.localIP().toString();
     display.setFont(ArialMT_Plain_10);
@@ -78,4 +92,55 @@ void wifi(){
     wifiManager.resetSettings();
     ESP.restart();
   }
+}
+void border() {
+  display.setFont(ArialMT_Plain_16);
+  display.drawString(0, 0, "CPU:");
+  display.drawString(0, 17, "GPU:");
+  display.drawString(0, 34, "NET:");
+  display.drawString(117, 0, "C");
+  display.drawString(117, 18, "C");
+  display.setFont(ArialMT_Plain_10);
+  display.drawString(110, 0, "O");
+  display.drawString(110, 18, "O");
+}
+void getData() {
+  if (client.connected()) {
+    if (client.available() > 0) {
+      String data = client.readStringUntil('\n');
+      Serial.println(data);
+      DynamicJsonDocument root(300);
+      deserializeJson(root, (char*) data.c_str());
+      cpuName = root["CPU"]["Name"].as<String>();
+      cpuLoad = root["CPU"]["Load"].as<String>();
+      cpuTemp = root["CPU"]["Temp"].as<String>();
+      gpuName = root["GPU"]["Name"].as<String>();
+      gpuLoad = root["GPU"]["Load"].as<String>();
+      gpuTemp = root["GPU"]["Temp"].as<String>();
+      net = root["Net"]["net"].as<String>();
+      if (cpuLoad.length() > 5)
+        cpuLoad = cpuLoad.substring(0, 5);
+      if (lanDauMoApp) {
+        //border();
+        lanDauMoApp = false;
+      }
+      else {
+        border();
+        display.setFont(ArialMT_Plain_16);
+        display.drawString(37, 0, cpuLoad + "%");
+        display.setFont(ArialMT_Plain_16);
+        display.drawString(85, 0, cpuTemp);
+        display.setFont(ArialMT_Plain_16);
+        display.drawString(37, 18, gpuLoad + "%");
+        display.setFont(ArialMT_Plain_16);
+        display.drawString(85, 18, gpuTemp);
+        display.setFont(ArialMT_Plain_16);
+        display.drawString(37, 34, net + "Mbps");
+      }
+    }
   }
+  else {
+    display.clear();
+    ketNoiApp = false;
+  }
+}
