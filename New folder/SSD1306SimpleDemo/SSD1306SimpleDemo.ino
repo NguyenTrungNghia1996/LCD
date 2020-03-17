@@ -1,6 +1,6 @@
 #include <Wire.h>
 #include "SSD1306Wire.h"
-SSD1306Wire display(0x3c, D7, D6);
+SSD1306Wire display(0x3c, D6, D7);
 #include "DHTesp.h"
 
 #ifdef ESP32
