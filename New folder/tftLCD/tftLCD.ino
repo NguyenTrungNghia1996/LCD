@@ -30,19 +30,31 @@ const int TS_LEFT = 924, TS_RT = 205, TS_TOP = 965, TS_BOT = 214;
 #define ORANGE 0xFD20
 #define GREENYELLOW 0xAFE5
 #define PINK 0xF81F
+String data = "";
 void setup() {
   Serial.begin(9600);
   uint16_t ID = tft.readID();
   tft.begin(ID);
+  // boder();
   tft.setRotation(1);
+  tft.fillScreen(BLACK);
 }
 
 void loop() {
-  boder();
-  delay(10000);
+  while (Serial.available()) {
+  char incomingByte = (char)Serial.read();
+
+    if (incomingByte == '*') {
+      showmsgXY(10, 38, 1, &FreeSans12pt7b, data.c_str(), CYAN, 0, 0);
+      delay(10000);
+    } else {
+      data += String(incomingByte);
+    }
+  }
 }
 void boder() {
   //heder
+  tft.setRotation(1);
   tft.fillScreen(BLACK);
   showmsgXY(135, 16, 1, &FreeSerif12pt7b, "MCU Hardware Monitor", WHITE, 0, 0);
   tft.drawFastHLine(0, 17, tft.width(), WHITE);
