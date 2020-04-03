@@ -44,9 +44,10 @@ void loop() {
   while (Serial.available()) {
   char incomingByte = (char)Serial.read();
 
-    if (incomingByte == '*') {
-      showmsgXY(10, 38, 1, &FreeSans12pt7b, data.c_str(), CYAN, 0, 0);
-      delay(10000);
+    if (incomingByte == '}}') {
+      showmsgXY(0, 30, 1, &FreeSans12pt7b, data.c_str(), CYAN, 480, 300);
+      data="";
+      delay(1000);
     } else {
       data += String(incomingByte);
     }
