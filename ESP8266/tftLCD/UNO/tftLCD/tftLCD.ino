@@ -1,9 +1,7 @@
 #include <Adafruit_GFX.h>
 #include <MCUFRIEND_kbv.h>
 MCUFRIEND_kbv tft;
-#include "TouchScreen.h"
 #include <ArduinoJson.h>
-
 #include "Fonts/FreeSans9pt7b.h"
 #include "Fonts/FreeSans12pt7b.h"
 #include "Fonts/FreeSerif12pt7b.h"

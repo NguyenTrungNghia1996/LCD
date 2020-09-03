@@ -1,0 +1,43 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30413.136
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "tftLCD", "tftLCD.vcxproj", "{C5F80730-F44F-4478-BDAE-6634EFC2CA88}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "MCUFRIEND_kbv-2.9.9-Release", "Libraries\MCUFRIEND_kbv\2.9.9-Release\MCUFRIEND_kbv\MCUFRIEND_kbv-2.9.9-Release.vcxitems", "{D9E1C8B9-B468-41F4-A3DA-394B5980996F}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ArduinoJson-6.16.1", "Libraries\ArduinoJson\6.16.1\ArduinoJson\ArduinoJson-6.16.1.vcxitems", "{504F7737-1859-491D-AE25-050ACE38BF09}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Adafruit_GFX_Library-1.10.0", "Libraries\Adafruit_GFX_Library\1.10.0\Adafruit_GFX_Library\Adafruit_GFX_Library-1.10.0.vcxitems", "{77BE46B5-1872-46C9-89C4-49A3CE943026}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Adafruit_BusIO-1.4.1", "Libraries\Adafruit_BusIO\1.4.1\Adafruit_BusIO\Adafruit_BusIO-1.4.1.vcxitems", "{F719F0CC-E251-45E1-9F18-B79C35DEAEAB}"
+EndProject
+Global
+	GlobalSection(SharedMSBuildProjectFiles) = preSolution
+		Libraries\ArduinoJson\6.16.1\ArduinoJson\ArduinoJson-6.16.1.vcxitems*{504f7737-1859-491d-ae25-050ace38bf09}*SharedItemsImports = 9
+		Libraries\Adafruit_GFX_Library\1.10.0\Adafruit_GFX_Library\Adafruit_GFX_Library-1.10.0.vcxitems*{77be46b5-1872-46c9-89c4-49a3ce943026}*SharedItemsImports = 9
+		Libraries\Adafruit_BusIO\1.4.1\Adafruit_BusIO\Adafruit_BusIO-1.4.1.vcxitems*{c5f80730-f44f-4478-bdae-6634efc2ca88}*SharedItemsImports = 4
+		Libraries\Adafruit_GFX_Library\1.10.0\Adafruit_GFX_Library\Adafruit_GFX_Library-1.10.0.vcxitems*{c5f80730-f44f-4478-bdae-6634efc2ca88}*SharedItemsImports = 4
+		Libraries\ArduinoJson\6.16.1\ArduinoJson\ArduinoJson-6.16.1.vcxitems*{c5f80730-f44f-4478-bdae-6634efc2ca88}*SharedItemsImports = 4
+		Libraries\MCUFRIEND_kbv\2.9.9-Release\MCUFRIEND_kbv\MCUFRIEND_kbv-2.9.9-Release.vcxitems*{c5f80730-f44f-4478-bdae-6634efc2ca88}*SharedItemsImports = 4
+		Libraries\MCUFRIEND_kbv\2.9.9-Release\MCUFRIEND_kbv\MCUFRIEND_kbv-2.9.9-Release.vcxitems*{d9e1c8b9-b468-41f4-a3da-394b5980996f}*SharedItemsImports = 9
+		Libraries\Adafruit_BusIO\1.4.1\Adafruit_BusIO\Adafruit_BusIO-1.4.1.vcxitems*{f719f0cc-e251-45e1-9f18-b79c35deaeab}*SharedItemsImports = 9
+	EndGlobalSection
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x86 = Debug|x86
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{C5F80730-F44F-4478-BDAE-6634EFC2CA88}.Debug|x86.ActiveCfg = Debug|Win32
+		{C5F80730-F44F-4478-BDAE-6634EFC2CA88}.Debug|x86.Build.0 = Debug|Win32
+		{C5F80730-F44F-4478-BDAE-6634EFC2CA88}.Release|x86.ActiveCfg = Release|Win32
+		{C5F80730-F44F-4478-BDAE-6634EFC2CA88}.Release|x86.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {2B449148-4D0A-4533-9B8B-CCF879316D42}
+	EndGlobalSection
+EndGlobal
